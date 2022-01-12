@@ -17,17 +17,17 @@ public class Controller implements ActionListener{
     public Controller () {
         g = new Game();
         v = new View();
+		
+		v.setActionListener(this);
     }
 
     public void actionPerformed (ActionEvent e) {
-        System.out.println(e.getActionCommand());
         if(e.getActionCommand().equals("MOVE")) {
             nCoord = v.getCoordinates();
             sDir = v.getDirection();
             
             System.out.println("HUMAN'S TURN");
             if(!g.getHuman().isLoser() && !g.getHuman().isDone()) {
-                displayHuman();
                 g.playHuman(nCoord, sDir);
             } else View.setNotif("Error Human");
 
@@ -66,12 +66,12 @@ public class Controller implements ActionListener{
 
     void displayHuman () {
         System.out.println("HUMAN LOSER? " + g.getHuman().isLoser());
-        System.out.println("HUMAN DONE? " + g.getHuman().isLoser());
+        System.out.println("HUMAN DONE? " + g.getHuman().isDone());
     }
 
     void displayAgent() {
         System.out.println("AGENT LOSER? " + g.getAgent().isLoser());
-        System.out.println("AGENT DONE? " + g.getAgent().isLoser());
+        System.out.println("AGENT DONE? " + g.getAgent().isDone());
     }
 
     public static void main(String[] args) {

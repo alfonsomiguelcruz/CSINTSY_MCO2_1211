@@ -14,10 +14,6 @@ public class View extends JFrame {
     private static ImageIcon imgBlk;
     private static ImageIcon imgBlkKing;
 
-    // private ArrayList<JLabel> lblRed;
-    // private ArrayList<JLabel> lblBlk;
-
-
     private final static Color RD = new Color(105, 20, 20);
     private final static Color BK = new Color(15, 15, 15);
     private final static Color LG = new Color(242, 242, 242);

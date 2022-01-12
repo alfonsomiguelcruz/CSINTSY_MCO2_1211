@@ -2,22 +2,12 @@ package model;
 
 public class Piece {
     private Location loc;
-    private int nPcVal;
     private char cPc;
     private boolean isKing;
 
-    public Piece (int value, char piece) {
-        nPcVal = value;
+    public Piece (char piece) {
         cPc = piece;
         isKing = false;
-    }
-
-    
-    /** Gets the value of the piece
-     * @return int
-     */
-    public int getValue () {
-        return nPcVal;
     }
 
     

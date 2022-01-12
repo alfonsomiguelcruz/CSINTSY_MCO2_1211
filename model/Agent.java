@@ -16,6 +16,7 @@ public class Agent extends Player implements Move {
         super();
         // numPrune = 0;
         // numMinMax = 0;
+		isDone = true;
         cPiece = 'x';
         initPieces(b, 'x');
     }
@@ -58,6 +59,12 @@ public class Agent extends Player implements Move {
                             
                             oldCoord = new Location(nRow, nCol);
                             newCoord = new Location(pRow, pCol);
+
+                            if(pRow == 7 && !b.getSquare(oldCoord).getPiece().isKing()) {
+                                b.getSquare(oldCoord).getPiece().setKing(true);
+                                b.getSquare(oldCoord).getPiece().setCharPiece('X');
+                            }
+                            
                             move(oldCoord, newCoord, b, enemy);
                         } else View.setNotif("Invalid Move: Not a King Piece Yet!");
                         break;
@@ -74,6 +81,12 @@ public class Agent extends Player implements Move {
                             
                             oldCoord = new Location(nRow, nCol);
                             newCoord = new Location(pRow, pCol);
+
+                            if(pRow == 7 && !b.getSquare(oldCoord).getPiece().isKing()) {
+                                b.getSquare(oldCoord).getPiece().setKing(true);
+                                b.getSquare(oldCoord).getPiece().setCharPiece('X');
+                            }
+
                             move(oldCoord, newCoord, b, enemy);
                         } else View.setNotif("Invalid Move: Not a King Piece Yet!");
                         break;
@@ -89,6 +102,12 @@ public class Agent extends Player implements Move {
 
                             oldCoord = new Location(nRow, nCol);
                             newCoord = new Location(pRow, pCol);
+
+                            if(pRow == 7 && !b.getSquare(oldCoord).getPiece().isKing()) {
+                                b.getSquare(oldCoord).getPiece().setKing(true);
+                                b.getSquare(oldCoord).getPiece().setCharPiece('X');
+                            }
+
                             move(oldCoord, newCoord, b, enemy);
                         break;
                     case SE:
@@ -103,14 +122,14 @@ public class Agent extends Player implements Move {
                             
                             oldCoord = new Location(nRow, nCol);
                             newCoord = new Location(pRow, pCol);
+
+                            if(pRow == 7 && !b.getSquare(oldCoord).getPiece().isKing()) {
+                                b.getSquare(oldCoord).getPiece().setKing(true);
+                                b.getSquare(oldCoord).getPiece().setCharPiece('X');
+                            }
+
                             move(oldCoord, newCoord, b, enemy);
                         break;
-                }
-
-                if(pRow == 7 && !b.getSquare(newCoord).getPiece().isKing()) {
-                    b.getSquare(newCoord).getPiece().setKing(true);
-                    b.getSquare(newCoord).getPiece().setCharPiece('X');
-                    View.updateSpace(oldCoord, newCoord, cPiece, b.getSquare(newCoord).getPiece().isKing());
                 }
             } else View.setNotif("Invalid Piece Move!");
         } else View.setNotif("Invalid Piece! (Wrong Coordinates or Unfree Piece)");
@@ -195,7 +214,6 @@ public class Agent extends Player implements Move {
         return NW || NE || SW || SE;
     }
 
-    
     /** 
      * Temporarily sets inputs for agent
      * @param nCoord

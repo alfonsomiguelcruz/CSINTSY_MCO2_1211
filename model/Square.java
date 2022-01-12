@@ -54,8 +54,8 @@ public class Square {
      * @param value Value of piece
      * @param piece Character of piece
      */
-    public void initPiece (int value, char piece) {
-        pc = new Piece(value, piece);
+    public void initPiece (char piece) {
+        pc = new Piece(piece);
         pc.setLoc(loc);
     }
 }

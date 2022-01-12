@@ -18,12 +18,12 @@ public class Board {
                 board[i][j] = new Square(i, j);
                 if(((i == 0 || i == 2) && j % 2 == 1) ||
                    ((i == 1) && j % 2 == 0))
-                    board[i][j].initPiece(1, 'x');
+                    board[i][j].initPiece('x');
                 else if (((i == 5 || i == 7) && j % 2 == 0) ||
                          ((i == 6) && j % 2 == 1))
-                    board[i][j].initPiece(1, 'o');
+                    board[i][j].initPiece('o');
                 else
-                    board[i][j].initPiece(0, '_');
+                    board[i][j].initPiece('_');
             }
 
         /********************

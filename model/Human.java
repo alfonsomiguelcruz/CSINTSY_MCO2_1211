@@ -8,6 +8,7 @@ public class Human extends Player implements Move {
     
     public Human (Board b) {
         super();
+		isDone = false;
         cPiece = 'o';
         initPieces(b, 'o');
     }
@@ -53,6 +54,12 @@ public class Human extends Player implements Move {
                         
                         oldCoord = new Location(nRow, nCol);
                         newCoord = new Location(pRow, pCol);
+
+                        if(pRow == 0 && !b.getSquare(oldCoord).getPiece().isKing()) {
+                            b.getSquare(oldCoord).getPiece().setKing(true);
+                            b.getSquare(oldCoord).getPiece().setCharPiece('O');
+                        }
+                        
                         move(oldCoord, newCoord, b, enemy);
                         break;
                     case NE:
@@ -69,6 +76,12 @@ public class Human extends Player implements Move {
                         
                         oldCoord = new Location(nRow, nCol);
                         newCoord = new Location(pRow, pCol);
+
+                        if(pRow == 0 && !b.getSquare(oldCoord).getPiece().isKing()) {
+                            b.getSquare(oldCoord).getPiece().setKing(true);
+                            b.getSquare(oldCoord).getPiece().setCharPiece('O');
+                        }
+
                         move(oldCoord, newCoord, b, enemy);
                         break;
                     case SW:
@@ -86,6 +99,12 @@ public class Human extends Player implements Move {
                             
                             oldCoord = new Location(nRow, nCol);
                             newCoord = new Location(pRow, pCol);
+
+                            if(pRow == 0 && !b.getSquare(oldCoord).getPiece().isKing()) {
+                                b.getSquare(oldCoord).getPiece().setKing(true);
+                                b.getSquare(oldCoord).getPiece().setCharPiece('O');
+                            }
+
                             move(oldCoord, newCoord, b, enemy);
                         } else View.setNotif("Invalid Move: Not a King Piece Yet!");
                         break;
@@ -101,20 +120,19 @@ public class Human extends Player implements Move {
                                 pRow += 1;
                                 pCol += 1;
                             }
-                            
+
                             oldCoord = new Location(nRow, nCol);
                             newCoord = new Location(pRow, pCol);
+
+                            if(pRow == 0 && !b.getSquare(oldCoord).getPiece().isKing()) {
+                                b.getSquare(oldCoord).getPiece().setKing(true);
+                                b.getSquare(oldCoord).getPiece().setCharPiece('O');
+                            }
+
                             move(oldCoord, newCoord, b, enemy);
                         } else View.setNotif("Invalid Move: Not a King Piece Yet!");
                         break;
                 }
-
-                if(pRow == 0 && !b.getSquare(newCoord).getPiece().isKing()) {
-                    b.getSquare(newCoord).getPiece().setKing(true);
-                    b.getSquare(newCoord).getPiece().setCharPiece('O');
-                    View.updateSpace(oldCoord, newCoord, cPiece, b.getSquare(newCoord).getPiece().isKing());
-                }
-
             } else View.setNotif("Invalid Piece Move!");
         } else View.setNotif("Invalid Piece! (Wrong Coordinates or Unfree Piece)");
     }
