@@ -1,14 +1,20 @@
 package model;
 
 public class Board {
+    /** Maximum size of the board */
     private final int SIZE = 8;
+
+    /** Main board used for the game or state */
     private Square[][] board;
 
+
+    /** Constructs an 8 x 8 board */
     public Board () {
         board = new Square[SIZE][SIZE];
-        initBoard();
     }
 
+
+    /** Initializes the starting state of the board */
     public void initBoard () {
         int i, j;
 
@@ -41,19 +47,15 @@ public class Board {
         *********************/
     }
 
-    /** Displays the board
-     * 
-     */
-    public void display () {
+    
+    /** Intializes the spaces of the board for the states */
+    public void initBoardSpaces () {
         int i, j;
 
-        System.out.println("================");
-        for(i = 0; i < SIZE; i++) {
+        //Initalize square and location of square
+        for(i = 0; i < SIZE; i++)
             for(j = 0; j < SIZE; j++)
-                System.out.print(board[i][j].getPiece().getPiece() + " ");
-            System.out.println();
-        }
-        System.out.println("================");
+                board[i][j] = new Square(i, j);
     }
 
     

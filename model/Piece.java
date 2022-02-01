@@ -1,10 +1,19 @@
 package model;
 
 public class Piece {
+    /** Location of the piece */
     private Location loc;
+
+    /** Character located in the piece */
     private char cPc;
+
+    /** King state of the piece */
     private boolean isKing;
 
+    /** Constructs a piece for the game
+     * 
+     * @param piece Representing symbol for the piece
+     */
     public Piece (char piece) {
         cPc = piece;
         isKing = false;
@@ -73,7 +82,7 @@ public class Piece {
      * @param loc
      */
     public void setLoc (Location loc) {
-        this.loc = new Location(loc.getRow(), loc.getCol());
+        this.loc = loc;
     }
 
     

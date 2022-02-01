@@ -1,7 +1,10 @@
 package model;
 
 public class Square {
+    /** Location of the square */
     private Location loc;
+
+    /** Piece contained in the square */
     private Piece pc;
 
     public Square (int r, int c) {
@@ -25,8 +28,8 @@ public class Square {
     }
 
     
-    /** 
-     * @param p
+    /** Sets the piece and its contents
+     * @param p Piece to update to the current piece
      */
     public void setPiece (Piece p) {
         pc = p;
@@ -57,5 +60,23 @@ public class Square {
     public void initPiece (char piece) {
         pc = new Piece(piece);
         pc.setLoc(loc);
+    }
+
+    /** Copies the piece of an existing Square
+     *  to an uninitialized square
+     * 
+     * @param sq Piece to copy from
+     */
+    public void copyPiece (Square sq) {
+        /* (3) Get the copy of the piece from sq */
+
+        //(3a) Initialize Piece with sq.pc's char
+        pc = new Piece(sq.pc.getPiece());
+
+        //(3b) Set the king state of the square
+        pc.setKing(sq.pc.isKing());
+
+        //(3c) Set the location of the piece
+        pc.setLoc(sq.pc.getLocation());
     }
 }

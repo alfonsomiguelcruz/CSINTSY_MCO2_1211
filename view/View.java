@@ -1,24 +1,36 @@
+/**
+ * CSINTSY, Term 1, A.Y. 2021 - 2022
+ * Machine Course Output 2: Checkers using Adversarial Search
+ * 
+ * Name     :   Alfonso Miguel G. Cruz
+ * Section  :   S12
+ * Date     :   January 31, 2022
+ * Teacher  :   Ms. Yamie Suarez
+ */
+
 package view;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
-import model.Location;
-
 import java.awt.*;
 import java.awt.event.*;
 
+import model.Location;
+
 public class View extends JFrame {
+    // Images for all pieces
     private static ImageIcon imgRed;
     private static ImageIcon imgRedKing;
     private static ImageIcon imgBlk;
     private static ImageIcon imgBlkKing;
 
+    // Colors needed for the User Interface
     private final static Color RD = new Color(105, 20, 20);
     private final static Color BK = new Color(15, 15, 15);
     private final static Color LG = new Color(242, 242, 242);
     private final static Color DG = new Color(38, 38, 38);
 
+    // Panels in creating the User Interface
     private static JPanel pBoard;
     private static JPanel pMenu;
     private static JPanel pNotif;
@@ -27,18 +39,22 @@ public class View extends JFrame {
     private static JPanel pCoord;
     private static JPanel pDir;
 
+    // Button for the Human Player to move
     private static JButton btnMove;
-    private static JButton b;
 
+    // Labels for the User Interface
     private static JLabel lblCoord;
     private static JLabel lblDir;
     private static JLabel lblNotif;
 
+    // Text Input containers for the User Interface
     private static JTextField txtCoord;
     private static JTextField txtDir;
     
+    // Main Board Panel for the User Interface
     private static JPanel[][] pGrid;
 
+    /** Constructs the View or User Interface of the game  */
     public View () {
         super("Checkers");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -54,6 +70,7 @@ public class View extends JFrame {
         setVisible(true);
     }
 
+    /** Initializes the image variables with the assets*/
     public void initImages () {
         imgRed     = new ImageIcon("view/red.png");
         imgRedKing = new ImageIcon("view/red_king.png");
@@ -61,6 +78,7 @@ public class View extends JFrame {
         imgBlkKing = new ImageIcon("view/black_king.png");
     }
 
+    /** Sets up the panels and other objects of the User Interface  */
     public void setMenu () {
         pMenu = new JPanel();
         pMenu.setLayout(new BorderLayout());
@@ -73,14 +91,11 @@ public class View extends JFrame {
         btnMove.setFocusable(false);
         btnMove.setVisible(true);
 
-        b = new JButton("AGENT");
-
         pBtn = new JPanel();
         pBtn.setLayout(new BorderLayout());
         pBtn.setPreferredSize(new Dimension(240, 120));
         pBtn.setBackground(DG);
-        pBtn.add(btnMove, BorderLayout.NORTH);
-        pBtn.add(b, BorderLayout.SOUTH);
+        pBtn.add(btnMove, BorderLayout.CENTER);
         pBtn.setBorder(new EmptyBorder(30, 30, 30, 30));
 
         lblNotif = new JLabel ("<html>Welcome to Checkers!<br/>AI is Thinking...</html>");
@@ -135,6 +150,7 @@ public class View extends JFrame {
         pMenu.setVisible(true);
     }
 
+    /** Sets up the board component of the Game UI */
     public void setBoard() {
         int i, j;
 
@@ -172,11 +188,21 @@ public class View extends JFrame {
         add(pBoard, BorderLayout.CENTER);
     }
 
+    /** Adds an action listener to the component
+     * 
+     * @param lis Action Listener object
+     */
     public void setActionListener (ActionListener lis) {
         btnMove.addActionListener(lis);
-        b.addActionListener(lis);
     }
 
+    /** Updates the spaces' contents in moving pieces
+     * 
+     * @param oCoord Old Coordinate of the piece
+     * @param nCoord New Coordinate of the piece
+     * @param cPiece Character representing the piece
+     * @param isKing King state of the piece
+     */
     public static void updateSpace (Location oCoord, Location nCoord, char cPiece, boolean isKing) {
         if(cPiece == 'x') {
             pGrid[oCoord.getRow()][oCoord.getCol()].removeAll();
@@ -194,24 +220,46 @@ public class View extends JFrame {
         }
     }
 
+    /** Clears the contents of a panel at a coordinate
+     * 
+     * @param nRow Row component of the piece to remove
+     * @param nCol Column component of the piece to remove
+     */
     public static void clearPiece(int nRow, int nCol) {
         pGrid[nRow][nCol].removeAll();
     }
 
+    /** Updates the notification of the game
+     * 
+     * @param s Message to display
+     */
     public static void setNotif (String s) {
         lblNotif.setText(s);
     }
     
+    /** Clears the input fields after moving  */
     public void clearFields () {
         txtCoord.setText("");
         txtDir.setText("");
     }
 
+    /** Gets the coordinates of the pieces in one string
+     * 
+     * @return Integer as the row and column coordinates combined
+     */
     public int getCoordinates () {
         return Integer.parseInt(txtCoord.getText());
     }
 
+    /** Gets the direction of the piece in one string
+     * 
+     * @return Direction of the piece as a string
+     */
     public String getDirection () {
         return txtDir.getText();
+    }
+
+    public void updateUI () {
+        SwingUtilities.updateComponentTreeUI(this);
     }
 }

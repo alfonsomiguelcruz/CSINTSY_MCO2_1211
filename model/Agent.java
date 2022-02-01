@@ -1,33 +1,30 @@
 package model;
 
-import view.View;
+import java.util.ArrayList;
 
 public class Agent extends Player implements Move {
-    // private int alpha;
-    // private int beta;
-    // private int numPrune;
-    // private int numMinMax;
-    private int nCoordInput;
-    private String sDirInput;
-    // private final int NEG_INF = Integer.MIN_VALUE;
-    // private final int POS_INF = Integer.MAX_VALUE;
+    private final int NEG_INF = Integer.MIN_VALUE;
+    private final int POS_INF = Integer.MAX_VALUE;
 
+    /** Constructs the Agent player of the game
+     * 
+     * @param b Board of the game
+     */
     public Agent (Board b) {
         super();
-        // numPrune = 0;
-        // numMinMax = 0;
-		isDone = true;
+
+		isDone = false;
         cPiece = 'x';
         initPieces(b, 'x');
     }
+    
 
-    
-    
-    /** 
-     * @param b
-     * @param enemy
+    /** Main moving method for the agent in the game
+     * @param b Current board state
+     * @param enemy Human player
      */
     public void turn (Board b, Player enemy) {
+        Action finalMove;
         String sMove;
         Location oldCoord, newCoord;
         int nRow, pRow; //Input Row, Player's NEW Row
@@ -35,192 +32,274 @@ public class Agent extends Player implements Move {
 
         pRow = -1;
         pCol = -1;
+        nRow = -1;
+        nCol = -1;
         oldCoord = null;
         newCoord = null;
-        
-        nRow = nCoordInput / 10 - 1;
-        nCol = nCoordInput % 10 - 1;
-        
-        if(isValidPiece(nRow, nCol, b) && isFree(nRow, nCol, b, enemy)) {
-            sMove = sDirInput;
 
-            if(isValidMove(sDirInput, nRow, nCol, b, enemy)) {
-                switch(directions.valueOf(sMove)) {
-                    case NW:
-                        if(b.getSquare(nRow, nCol).getPiece().isKing()) {
-                            pRow = nRow - 1;
-                            pCol = nCol - 1;
+        finalMove = AlphaBeta(b, enemy);
 
-                            if(isValidCapture(sMove, pRow, pCol, b, enemy)) {
-                                capture(b, enemy, pRow, pCol);
-                                pRow -= 1;
-                                pCol -= 1;
-                            }
-                            
-                            oldCoord = new Location(nRow, nCol);
-                            newCoord = new Location(pRow, pCol);
+        sMove = finalMove.getMove();
+        nRow = finalMove.getLoc() / 10;
+        nCol = finalMove.getLoc() % 10;
 
-                            if(pRow == 7 && !b.getSquare(oldCoord).getPiece().isKing()) {
-                                b.getSquare(oldCoord).getPiece().setKing(true);
-                                b.getSquare(oldCoord).getPiece().setCharPiece('X');
-                            }
-                            
-                            move(oldCoord, newCoord, b, enemy);
-                        } else View.setNotif("Invalid Move: Not a King Piece Yet!");
-                        break;
-                    case NE:
-                        if(b.getSquare(nRow, nCol).getPiece().isKing()) {
-                            pRow = nRow - 1;
-                            pCol = nCol + 1;
+        try
+        {
+        switch(directions.valueOf(sMove)) {
+            case NW:
+                if(b.getSquare(nRow, nCol).getPiece().isKing()) {
+                    pRow = nRow - 1;
+                    pCol = nCol - 1;
 
-                            if(isValidCapture(sMove, pRow, pCol, b, enemy)) {
-                                capture(b, enemy, pRow, pCol);
-                                pRow -= 1;
-                                pCol += 1;
-                            }
-                            
-                            oldCoord = new Location(nRow, nCol);
-                            newCoord = new Location(pRow, pCol);
+                    if(isValidCapture(sMove, pRow, pCol, b, enemy)) {
+                        capture(b, enemy, pRow, pCol);
+                        pRow -= 1;
+                        pCol -= 1;
+                    }
+                    
+                    oldCoord = new Location(nRow, nCol);
+                    newCoord = new Location(pRow, pCol);
 
-                            if(pRow == 7 && !b.getSquare(oldCoord).getPiece().isKing()) {
-                                b.getSquare(oldCoord).getPiece().setKing(true);
-                                b.getSquare(oldCoord).getPiece().setCharPiece('X');
-                            }
-
-                            move(oldCoord, newCoord, b, enemy);
-                        } else View.setNotif("Invalid Move: Not a King Piece Yet!");
-                        break;
-                    case SW:
-                            pRow = nRow + 1;
-                            pCol = nCol - 1;
-
-                            if(isValidCapture(sMove, pRow, pCol, b, enemy)) {
-                                capture(b, enemy, pRow, pCol);
-                                pRow += 1;
-                                pCol -= 1;
-                            }
-
-                            oldCoord = new Location(nRow, nCol);
-                            newCoord = new Location(pRow, pCol);
-
-                            if(pRow == 7 && !b.getSquare(oldCoord).getPiece().isKing()) {
-                                b.getSquare(oldCoord).getPiece().setKing(true);
-                                b.getSquare(oldCoord).getPiece().setCharPiece('X');
-                            }
-
-                            move(oldCoord, newCoord, b, enemy);
-                        break;
-                    case SE:
-                            pRow = nRow + 1;
-                            pCol = nCol + 1;
-
-                            if(isValidCapture(sMove, pRow, pCol, b, enemy)) {
-                                capture(b, enemy, pRow, pCol);
-                                pRow += 1;
-                                pCol += 1;
-                            }
-                            
-                            oldCoord = new Location(nRow, nCol);
-                            newCoord = new Location(pRow, pCol);
-
-                            if(pRow == 7 && !b.getSquare(oldCoord).getPiece().isKing()) {
-                                b.getSquare(oldCoord).getPiece().setKing(true);
-                                b.getSquare(oldCoord).getPiece().setCharPiece('X');
-                            }
-
-                            move(oldCoord, newCoord, b, enemy);
-                        break;
+                    if(pRow == 7 && !b.getSquare(oldCoord).getPiece().isKing()) {
+                        b.getSquare(oldCoord).getPiece().setKing(true);
+                        b.getSquare(oldCoord).getPiece().setCharPiece('X');
+                    }
+                    
+                    move(oldCoord, newCoord, b, enemy);
                 }
-            } else View.setNotif("Invalid Piece Move!");
-        } else View.setNotif("Invalid Piece! (Wrong Coordinates or Unfree Piece)");
+                break;
+            case NE:
+                if(b.getSquare(nRow, nCol).getPiece().isKing()) {
+                    pRow = nRow - 1;
+                    pCol = nCol + 1;
+
+                    if(isValidCapture(sMove, pRow, pCol, b, enemy)) {
+                        capture(b, enemy, pRow, pCol);
+                        pRow -= 1;
+                        pCol += 1;
+                    }
+                    
+                    oldCoord = new Location(nRow, nCol);
+                    newCoord = new Location(pRow, pCol);
+
+                    if(pRow == 7 && !b.getSquare(oldCoord).getPiece().isKing()) {
+                        b.getSquare(oldCoord).getPiece().setKing(true);
+                        b.getSquare(oldCoord).getPiece().setCharPiece('X');
+                    }
+
+                    move(oldCoord, newCoord, b, enemy);
+                }
+                break;
+            case SW:
+                    pRow = nRow + 1;
+                    pCol = nCol - 1;
+
+                    if(isValidCapture(sMove, pRow, pCol, b, enemy)) {
+                        capture(b, enemy, pRow, pCol);
+                        pRow += 1;
+                        pCol -= 1;
+                    }
+
+                    oldCoord = new Location(nRow, nCol);
+                    newCoord = new Location(pRow, pCol);
+
+                    if(pRow == 7 && !b.getSquare(oldCoord).getPiece().isKing()) {
+                        b.getSquare(oldCoord).getPiece().setKing(true);
+                        b.getSquare(oldCoord).getPiece().setCharPiece('X');
+                    }
+
+                    move(oldCoord, newCoord, b, enemy);
+                break;
+            case SE:
+                    pRow = nRow + 1;
+                    pCol = nCol + 1;
+
+                    if(isValidCapture(sMove, pRow, pCol, b, enemy)) {
+                        capture(b, enemy, pRow, pCol);
+                        pRow += 1;
+                        pCol += 1;
+                    }
+                    
+                    oldCoord = new Location(nRow, nCol);
+                    newCoord = new Location(pRow, pCol);
+
+                    if(pRow == 7 && !b.getSquare(oldCoord).getPiece().isKing()) {
+                        b.getSquare(oldCoord).getPiece().setKing(true);
+                        b.getSquare(oldCoord).getPiece().setCharPiece('X');
+                    }
+
+                    move(oldCoord, newCoord, b, enemy);
+                break;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    
+
+    /** Implements the Alpha - Beta pruning algorithm
+     * 
+     * @param b Current board state
+     * @param p Enemy player - Human
+     * @return
+     */
+    public Action AlphaBeta (Board b, Player p) {
+        State initState = new State();
+        Action aMove = new Action();
+
+        // Copy the current board as the initial state
+        initState.copyBoard(b);
+
+        aMove = MaxValue (p, initState, NEG_INF, POS_INF, 0);
+        return aMove;
     }
 
-    
-    /**  Permanently checks if the agent is free in all directions
-     * @param row
-     * @param col
-     * @param b
-     * @param p
-     * @return boolean
-     */
-    public boolean isFree(int row, int col, Board b, Player p) {
-        boolean NW, NE, SW, SE;
 
-        NW = false;
-        NE = false;
-        SW = false;
-        SE = false;
-    
-        //Northwest: --; King - State for Human Pieces go NW and NE
-        if(isValidRange(row - 1, col - 1) && b.getSquare(row, col).getPiece().isKing()) {
-            // If one square NW is the same piece as player's, its not free
-            if(b.getSquare(row - 1, col - 1).getSymbol() == cPiece)
-                NW = false; //NW (1 units) is blocked
-            // If one square NW is the same piece as enemy's 
-            else if(b.getSquare(row - 1, col - 1).getSymbol() == p.cPiece) {
-                if(isValidRange(row - 2, col - 2)) {
-                    //If one square NW (2 units) is a free space, it's free
-                    if(b.getSquare(row - 2, col  - 2).getSymbol() == '_')
-                        NW = true; //NW (2 units) is free
-                } else NW = false; //NW (2 units) is blocked
-            } else NW = true; //NW (1 units) is free
-        } else NW = false; //NW is blocked
+    /** Gets the Max value after evaluating a series of states
+     *  done for the agent player to maximize efficiency of their move
+     * 
+     * @param p Enemy player
+     * @param s Current state
+     * @param alpha Value of alpha
+     * @param beta Value of beta
+     * @param depth Depth in the state tree
+     * @return Best action amongst all states and actions
+     */
+    private Action MaxValue (Player p, State s, int alpha, int beta, int depth) {
+        Action actOne = new Action(); //v, move
+        Action actTwo = new Action(); //v2, a2
+        Action finalMove = null;
+        ArrayList<State> states = new ArrayList<>();
+        int i;
+	
+        if(isCutoff(s, depth)) {
+            return s.getAction();
+        }
+
+        actOne.setEval(NEG_INF);
+        s.expand(p, states, depth);
         
-        //Northeast: -+; King - State for Human Pieces go NW and NE
-        if(isValidRange(row - 1, col + 1) && b.getSquare(row, col).getPiece().isKing()) {
-            // If one square NE is the same piece as player's, its not free
-            if(b.getSquare(row - 1, col + 1).getSymbol() == cPiece)
-                NE = false; //NE (1 units) is blocked
-            // If one square NE is the same piece as enemy's 
-            else if(b.getSquare(row - 1, col + 1).getSymbol() == p.cPiece) {
-                if(isValidRange(row - 2, col + 2)) {
-                    //If one square NE (2 units) is a free space, it's free
-                    if(b.getSquare(row - 2, col  + 2).getSymbol() == '_')
-                        NE = true; //NE (2 units) is free
-                } else NE = false; //NE (2 units) is blocked
-            } else NE = true; //NE (1 units) is free
-        } else NE = false; //NE is blocked
+        // For Alpha - Beta WITH Move Ordering only
+        removeStates(states);
 
-        //Southwest: +-
-        if(isValidRange(row + 1, col - 1)) {
-            // If one square SW is the same piece as player's, its not free
-            if(b.getSquare(row + 1, col - 1).getSymbol() == cPiece)
-                SW = false; //SW (1 units) is blocked
-            // If one square SW is the same piece as enemy's 
-            else if(b.getSquare(row + 1, col - 1).getSymbol() == p.cPiece) {
-                if(isValidRange(row + 2, col - 2)) {
-                    //If one square SW (2 units) is a free space, it's free
-                    if(b.getSquare(row + 2, col - 2).getSymbol() == '_')
-                        SW = true; //SW (2 units) is free
-                } else SW = false; //SW (2 units) is blocked
-            } else SW = true; //SW (1 units) is free
-        } else SW = false; //SW is blocked
+        for(i = 0; i < states.size(); i++) {
+            // Get the action, utilVal, and location of v2, a2
+            actTwo = MinValue(p, states.get(i), alpha, beta, depth + 1);
 
-        //Southeast: ++; King - State for Human Pieces go SW and SE
-        if(isValidRange(row + 1, col + 1)) {
-            // If one square SE is the same piece as player's, its not free
-            if(b.getSquare(row + 1, col + 1).getSymbol() == cPiece)
-                SE = false; //SE (1 units) is blocked
-            // If one square SE is the same piece as enemy's 
-            else if(b.getSquare(row + 1, col + 1).getSymbol() == p.cPiece) {
-                if(isValidRange(row + 2, col + 2)) {
-                    //If one square SE (2 units) is a free space, it's free
-                    if(b.getSquare(row + 2, col + 2).getSymbol() == '_')
-                        SE = true; //SE (2 units) is free
-                } else SE = false; //SE (2 units) is blocked
-            } else SE = true; //SE (1 units) is free
-        } else SE = false; //SE is blocked
+            if(actTwo.getEval() > actOne.getEval()) {
+                if(depth == 0) {
+                    if(finalMove == null)
+                        finalMove = new Action();
+                    finalMove.setAction(states.get(i).getAction());
+                }
 
-        return NW || NE || SW || SE;
+                actOne.setAction(actTwo);
+                alpha = Integer.max(alpha, actOne.getEval());
+            }
+
+            if(actOne.getEval() >= beta && finalMove == null)
+                return actOne;
+            else if (actOne.getEval() >= beta && finalMove != null)
+                return finalMove;
+        }
+		
+        if(finalMove == null)
+            return actOne;
+        else
+            return finalMove;
     }
 
-    /** 
-     * Temporarily sets inputs for agent
-     * @param nCoord
-     * @param sDir
+
+    /** Gets the Min value after evaluating a series of states
+     *  done for the human player to minimize efficency of their move
+     * 
+     * @param p Enemy player
+     * @param s Current state
+     * @param alpha Value of alpha
+     * @param beta Value of beta
+     * @param depth Depth in the state tree
+     * @return Action amongst all states and actions evaluated
      */
-    public void setInputs (int nCoord, String sDir) {
-        nCoordInput = nCoord;
-        sDirInput = sDir;
+    private Action MinValue (Player p, State s, int alpha, int beta, int depth) {
+        Action actOne = new Action();
+        Action actTwo = new Action();
+        ArrayList<State> states = new ArrayList<>();
+        int i;
+
+        if(isCutoff(s, depth)) {
+            return s.getAction();
+        }
+
+        actOne.setEval(POS_INF);
+        s.expand(p, states, depth);
+
+        // For Alpha - Beta WITH Move Ordering only
+        removeStates(states);
+
+        for(i = 0; i < states.size(); i++) {
+            // Get the action, utilVal, and location of v2, a2
+            actTwo = MaxValue(p, states.get(i), alpha, beta, depth + 1);
+ 
+            if(actTwo.getEval() < actOne.getEval()) {
+                actOne.setAction(actTwo);
+                beta = Integer.min(beta, actOne.getEval());
+            }
+
+            if(actOne.getEval() <= alpha)
+                return actOne;
+        }
+
+        return actOne;
+    }
+    
+    
+    /** Checks if the state tree has reached the cutoff mark
+     *  whether a player has won, or has reached depth 4
+     * 
+     * @param s Current state
+     * @param depth Depth at the state tree
+     * @return
+     */
+    private boolean isCutoff(State s, int depth) {
+        if(depth == 4)
+            return true;
+        else if (s.hasWinner() == 1 || s.hasWinner() == -1)
+            return true;
+        else
+            return false;
+    }
+	
+	/** Removes unwanted states for state traversal
+     * 
+     * @param states List of nodes to manipulate
+     */
+    private void removeStates (ArrayList<State> states) {
+        int i, best;
+        ArrayList<State> s = new ArrayList<>();
+        State temp;
+        best = -1;
+		
+        // Find the node with the highest utility value
+        for(i = 0; i < states.size() - 1; i++) {
+            if(states.get(i).getAction().getEval() > states.get(i + 1).getAction().getEval())
+                best = i;
+        }
+
+        /* If there exists a node that has the highest utility value
+           Remove all nodes except those whose values are only equal
+           to the state at index [best]
+
+           Else if not, keep all nodes as there are more nodes yet to explore.
+        */
+        if (best != -1) {
+            for(i = 0; i < states.size(); i++)
+                if(states.get(i).getAction().getEval() == states.get(best).getAction().getEval())
+                    s.add(states.get(i));
+
+            states.clear();
+            
+            for(i = 0; i < s.size(); i++)
+                states.add(s.get(i));
+        }
     }
 }

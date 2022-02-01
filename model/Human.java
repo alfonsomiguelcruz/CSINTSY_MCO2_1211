@@ -3,17 +3,25 @@ package model;
 import view.View;
 
 public class Human extends Player implements Move {
+    /** Piece Input */
     private int nCoordInput;
+
+    /** Direction Input */
     private String sDirInput;
     
+    
+    /** Creates a Human player for the game
+     * 
+     * @param b Board for the game
+     */
     public Human (Board b) {
         super();
-		isDone = false;
+		isDone = true;
         cPiece = 'o';
         initPieces(b, 'o');
     }
 
-    
+
     /** Turn for the Player to move
      * 
      * @param b Board of the Game
@@ -157,10 +165,12 @@ public class Human extends Player implements Move {
         //Northwest: --
         if(isValidRange(row - 1, col - 1)) {
             // If one square NW is the same piece as player's, its not free
-            if(b.getSquare(row - 1, col - 1).getSymbol() == cPiece)
+            if(b.getSquare(row - 1, col - 1).getSymbol() == cPiece ||
+               b.getSquare(row - 1, col - 1).getSymbol() == toUp(cPiece))
                 NW = false; //NW (1 units) is blocked
             // If one square NW is the same piece as enemy's 
-            else if(b.getSquare(row - 1, col - 1).getSymbol() == p.cPiece) {
+            else if(b.getSquare(row - 1, col - 1).getSymbol() == p.cPiece ||
+                    b.getSquare(row - 1, col - 1).getSymbol() == toUp(p.cPiece)) {
                 if(isValidRange(row - 2, col - 2)) {
                     //If one square NW (2 units) is a free space, it's free
                     if(b.getSquare(row - 2, col  - 2).getSymbol() == '_')
@@ -172,7 +182,8 @@ public class Human extends Player implements Move {
         //Northeast: -+
         if(isValidRange(row - 1, col + 1)) {
             // If one square NE is the same piece as player's, its not free
-            if(b.getSquare(row - 1, col + 1).getSymbol() == cPiece)
+            if(b.getSquare(row - 1, col + 1).getSymbol() == cPiece ||
+               b.getSquare(row - 1, col + 1).getSymbol() == toUp(cPiece))
                 NE = false; //NE (1 units) is blocked
             // If one square NE is the same piece as enemy's 
             else if(b.getSquare(row - 1, col + 1).getSymbol() == p.cPiece) {
@@ -187,10 +198,12 @@ public class Human extends Player implements Move {
         //Southwest: +-; King - State for Human Pieces go SW and SE
         if(isValidRange(row + 1, col - 1) && b.getSquare(row, col).getPiece().isKing()) {
             // If one square SW is the same piece as player's, its not free
-            if(b.getSquare(row + 1, col - 1).getSymbol() == cPiece)
+            if(b.getSquare(row + 1, col - 1).getSymbol() == cPiece ||
+               b.getSquare(row + 1, col - 1).getSymbol() == toUp(cPiece))
                 SW = false; //SW (1 units) is blocked
             // If one square SW is the same piece as enemy's 
-            else if(b.getSquare(row + 1, col - 1).getSymbol() == p.cPiece) {
+            else if(b.getSquare(row + 1, col - 1).getSymbol() == p.cPiece ||
+                    b.getSquare(row + 1, col - 1).getSymbol() == toUp(p.cPiece)) {
                 if(isValidRange(row + 2, col - 2)) {
                     //If one square SW (2 units) is a free space, it's free
                     if(b.getSquare(row + 2, col - 2).getSymbol() == '_')
@@ -202,10 +215,12 @@ public class Human extends Player implements Move {
         //Southeast: ++; King - State for Human Pieces go SW and SE
         if(isValidRange(row + 1, col + 1) && b.getSquare(row, col).getPiece().isKing()) {
             // If one square SE is the same piece as player's, its not free
-            if(b.getSquare(row + 1, col + 1).getSymbol() == cPiece)
+            if(b.getSquare(row + 1, col + 1).getSymbol() == cPiece ||
+               b.getSquare(row + 1, col + 1).getSymbol() == toUp(cPiece))
                 SE = false; //SE (1 units) is blocked
             // If one square SE is the same piece as enemy's 
-            else if(b.getSquare(row + 1, col + 1).getSymbol() == p.cPiece) {
+            else if(b.getSquare(row + 1, col + 1).getSymbol() == p.cPiece ||
+                    b.getSquare(row + 1, col + 1).getSymbol() == toUp(p.cPiece)) {
                 if(isValidRange(row + 2, col + 2)) {
                     //If one square SE (2 units) is a free space, it's free
                     if(b.getSquare(row + 2, col + 2).getSymbol() == '_')
@@ -217,6 +232,12 @@ public class Human extends Player implements Move {
         return NW || NE || SW || SE;
     }
 
+
+    /** Sets the inputs of the player
+     * 
+     * @param nCoord Piece input of the player
+     * @param sDir Direction input of the player
+     */
     public void setInputs (int nCoord, String sDir) {
         nCoordInput = nCoord;
         sDirInput = sDir;
