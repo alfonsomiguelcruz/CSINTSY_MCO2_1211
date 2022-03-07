@@ -1,5 +1,5 @@
-# CSINTSY-MCO2-1211
-A Human vs AI program that uses Adversarial Search, with and without move ordering.
+# CSINTSY_MCO2_1211
+A Human vs AI Checkers program that uses Adversarial Search, with and without move ordering.
 
 ## Alpha - Beta Pruning Algorithm without Move Ordering
 The algorithm implemented is a regular Alpha - Beta minimax algorithm, which removes parts of the state
